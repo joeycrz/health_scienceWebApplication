@@ -1,17 +1,38 @@
-//import { Text } from '@chakra-ui/react';
-import { Box, Center, ChakraBaseProvider, Divider, extendBaseTheme, Spacer } from '@chakra-ui/react';
 import React from 'react';
-import { Grid, GridItem, Textarea } from '@chakra-ui/react'
-import { Card, CardHeader, CardBody, Text, CardFooter, Heading, Stack } from '@chakra-ui/react'
-import { List, ListItem, ListIcon, OrderedList, UnorderedList} from '@chakra-ui/react'
-// import Container from 'react-bootstrap/Container';
-// import Row from 'react-bootstrap/Row';
-// import Col from 'react-bootstrap/Col';
 import './App.css';
+import './index.css';
+import { Flex, Text, ChakraBaseProvider, Stack, WrapItem, Spacer, Center} from '@chakra-ui/react';
+import { Grid, GridItem, Heading, Box, Button, ButtonGroup } from '@chakra-ui/react'
+import { ListItem, OrderedList } from '@chakra-ui/react';
+import {
+  FormControl,
+  FormLabel,
+  Input
+} from '@chakra-ui/react'
+
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+  useDisclosure
+} from '@chakra-ui/react'
+
 import {db} from './firebase';
 import { uid } from 'uid';
 import {set, ref, onValue} from 'firebase/database';
 import { useState, useEffect } from 'react';
+
+// User Authentication
+import SignIn from './components/auth/signin';
+import SignUp from './components/auth/signup';
+import AuthDetails from './components/authDetails';
+import { Container } from 'react-bootstrap';
 
 function App() {
   
@@ -46,59 +67,113 @@ function App() {
     setTodo("");
   }
 
+  
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
+  
+
   return (
     <ChakraBaseProvider>
-      <div>
-        <Text fontSize={30} align="center" paddingBottom={5} >Health Science Announcements Web Application</Text>
-      </div>
-     
-      <div>
-        <Grid templateColumns='repeats(5,1fr)' gap={6}>
-          <GridItem colStart={2} colEnd={4} bg='yellow.200'>
-            <Text align={'center'}>Below you will find the announcements for the class</Text>
+  
+      <Grid
+        templateColumns='repeat(4, 1fr)'
+        templateRows='repeat(5, 1fr)'
+        h='937px' gap={4}>
+        {/* START OF GRID LAYOUT */}
+        {/* ///////////////////////////////////////////// */}
 
-          </GridItem>
+        {/* HEADER/TITLE */}
+        <GridItem colSpan={4} bg={'gray.300'}> 
 
+          <Stack direction={['column', 'row']} spacing='1px'>
+            <Box w='1500px' h='150px' bg={'gray.200'}>
+              <Text paddingTop={10} fontFamily={'mono'} fontSize={60} >Health Science Announcements</Text>
+            </Box>
 
+            {/* LOGIN / USER AUTHENTICATION */}
+            <Box w='220px' h='100px' bg={'gray.200'}>
+              <Text align={'center'}>Already have an acccount? Sign In below!!</Text>
+              <Popover offset={[1,10]} placement='bottom' isLazy>
+                <Box alignContent={'center'} >
+                <PopoverTrigger>
+                  <Button className='ButtonPadding'>
+                    <Text fontWeight={'bold'}>Login</Text>
+                  </Button>
+                </PopoverTrigger>
+                </Box>
+                <PopoverContent bg={'gray.300'}>
+                  
+                  <PopoverHeader fontWeight='semibold'>Please enter your login credentials</PopoverHeader>
+                  <PopoverArrow />
+                  {/* <PopoverCloseButton /> */}
+                  <PopoverBody>
+                    <SignIn/>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </Box>
 
-          {/* Second column for user sign in button */}
-          <GridItem colStart={4} colEnd={5} bg='blue.200'>
-            <Text align={'center'}>Login</Text>
-          </GridItem>
-          
-          <GridItem colStart={2} colEnd={4}>
-            <div align="center">
-              <Textarea size='sm' value={todo} onChange={hanldeTodoChange} placeholder='Enter a new announcement.'></Textarea>
-              {/* <input type='text' value={todo} onChange={hanldeTodoChange} placeholder='ENTER A ANNOUNCEMENT'/> */}
-              <button onClick={writeToDatabase}>Submit</button>
-            </div>
-      
-          </GridItem>
+            <Box w='220px' h='100px' bg={'gray.200'}>
+              <Text align={'center'}>Don't have an acccount? Create an account below!</Text>
+              <Popover offset={[1,10]} placement='bottom' isLazy>
+                <Box alignContent={'center'} >
+                <PopoverTrigger>
+                  <Button className='ButtonPadding'>
+                    <Text fontWeight={'bold'}>Sign Up</Text>
+                  </Button>
+                </PopoverTrigger>
+                </Box>
+                <PopoverContent bg={'red.300'}>
+                  
+                  <PopoverHeader fontWeight='semibold'>Please enter a username and password.</PopoverHeader>
+                  <PopoverArrow />
+                  {/* <PopoverCloseButton /> */}
+                  <PopoverBody>
+                    <SignUp/>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </Box>
+          </Stack>
 
-          <GridItem colStart={2} colEnd={4} colSpan={4} rowSpan={'25'} bg='lightgrey'>
-          <Text fontSize={20} align="center" paddingBottom={3}>Announcements</Text>
+        </GridItem>
+        
 
-            <Center>
-              <OrderedList>
+        {/* ANNOUNCEMENTS CONTENT */}
+        <GridItem colSpan={3} rowStart={2} rowEnd={5} bg='papayawhip'>
+
+          <Text fontSize={25} fontFamily={'monospace'} align="center" paddingBottom={3}>Check out the announcements below!!!</Text>
+
+          <Box paddingLeft={10} fontSize={20}>
+            <OrderedList>
               {todos.map((todo) => (
                 <ListItem>{todo.todo}</ListItem>
               ))}
-              </OrderedList>
-             
-            </Center>
-          </GridItem>
-        </Grid>
+            </OrderedList>
+          </Box>
+          </GridItem>        
         
-
-
-        <Box paddingLeft={75} paddingRight={75} paddingTop={5} bg='orange.50'>
+        {/* FOOTER/CONTACT INFORMATION */}
+        <GridItem colSpan={4} rowStart={5}  bg='light gray'>
           <Text fontSize={20} align="center" paddingBottom={3}>AWESOME PROGRAMMER INFO</Text>
           <Text>@joey.cz on the gram</Text>
-        </Box>
+        </GridItem>
 
-      </div>
+
+
+
+      </Grid>
+
+        {/* <SignIn/>
+        <SignUp/>
+        <AuthDetails/>
+      */}
       
     </ChakraBaseProvider>
+
+    
 
   );
 }
