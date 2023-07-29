@@ -21,7 +21,7 @@ const SignUp = () => {
         <div class='sign-in-container'>
             <form onSubmit={signUp}>
 
-                <h3>Create Account</h3>
+                
                 <input 
                     type="email" 
                     placeholder='Enter your email'
