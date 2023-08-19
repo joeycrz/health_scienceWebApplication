@@ -13,6 +13,15 @@
   }
 }
 
+@font-face {
+  font-family: Imported;
+  src: url(/src/fonts/SofiaProBlack.ttf);
+}
+
+.imported {
+  font-family: Imported;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
@@ -9,10 +9,10 @@ const AuthPost = () => {
     const [authUser, setAuthUser] = useState(null);
 
     useEffect(() => {
-        const listen = onAuthStateChanged(auth,(user) => {
-            if(user) {
+        const listen = onAuthStateChanged(auth, (user) => {
+            if (user) {
                 setAuthUser(user)
-            } else{
+            } else {
                 setAuthUser(null);
             }
         });
@@ -21,7 +21,7 @@ const AuthPost = () => {
             listen();
         }
     }, [])
-    
+
     const userSignOut = () => {
         signOut(auth).then(() => {
             console.log("You signed out successfully");
@@ -29,7 +29,15 @@ const AuthPost = () => {
         }).catch(error => console.log(error))
     }
     return (
-        <div>{authUser ? <><AnnounceSubmit/> </> : <p>You are currently signed out and do not have permission to post announcements.</p>}</div>
+        <div>
+            {authUser ? (
+                <AnnounceSubmit />
+            ) : (
+                <p>You are currently signed out and do not have permission to post announcements.</p>
+            )}
+        </div>
+
+
     )
 }
 

@@ -1,14 +1,9 @@
 import React from 'react';
 import './App.css';
 import './index.css';
-import { Flex, Text, ChakraBaseProvider, Stack, WrapItem, Spacer, Center, VStack, HStack } from '@chakra-ui/react';
-import { Grid, GridItem, Heading, Box, Button, ButtonGroup } from '@chakra-ui/react'
-import { ListItem, OrderedList } from '@chakra-ui/react';
-import {
-  FormControl,
-  FormLabel,
-  Input
-} from '@chakra-ui/react'
+import { Flex, Image, Divider, Text, ChakraBaseProvider, Stack, SimpleGrid, Spacer, Center, VStack, HStack } from '@chakra-ui/react';
+import { Grid, GridItem, Heading, Box, Button, ButtonGroup, StackDivider } from '@chakra-ui/react'
+import { Card, CardBody, CardFooter, CardHeader, CardBodyProps } from '@chakra-ui/react';
 
 import {
   Popover,
@@ -40,12 +35,16 @@ import AnnounceSubmit from './announceSubmit';
 import AuthPost from './components/authPost';
 function App() {
 
+  const [title, setTitle] = useState("");
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
   const hanldeTodoChange = (e) => {
     setTodo(e.target.value);
   }
+
+
+
   // Read
   useEffect(() => {
 
@@ -54,10 +53,13 @@ function App() {
       const data = snapshot.val();
       if (data !== null) {
         Object.values(data).map(todo => {
+          // setTitle(todo.title);
           setTodos(oldArray => [...oldArray, todo])
+          setTodos(oldArray => [...oldArray, title])
         });
       }
     })
+
   }, []);
 
   // write
@@ -80,18 +82,18 @@ function App() {
 
   return (
     <ChakraBaseProvider>
-
       <Grid
+        justifySelf="center"
         bg={'blackAlpha.800'}
         templateColumns='repeat(6, 1fr)'
         templateRows='repeat(5, 1fr)'
-        h='930px' gap={2}>
+        h='930px'>
         {/* START OF GRID LAYOUT */}
         {/* ///////////////////////////////////////////// */}
 
         {/* HEADER/TITLE */}
         <GridItem rowStart={1} rowEnd={2} colStart={2} colEnd={6} bg={'gray.200'}>
-          <Text align={'center'} paddingTop={10} fontFamily={'mono'} fontStyle={'oblique'} fontSize={70} >Health Science Announcements</Text>
+          <Text align={'center'} paddingTop={10} className='imported' fontSize={70} >Health Science Announcements</Text>
         </GridItem>
 
         <GridItem rowStart={1} rowEnd={2} colStart={6} colEnd={7} bg={'gray.400'}>
@@ -145,49 +147,57 @@ function App() {
               </Text>
             </Box>
           </Center>
-
-
         </GridItem>
 
-
-
-
         {/* ANNOUNCEMENTS CONTENT */}
-        <GridItem colStart={1} colEnd={6} rowStart={2} rowEnd={5} bg='papayawhip'>
+        <GridItem colStart={1} colEnd={6} rowStart={2} rowEnd={5} bg='gray.200'>
+          <Box
+            borderWidth="1px"
+            borderColor="gray.300"
+            borderRadius="md"
+            p="4"
+            width="100%"
+            maxW="400px"
+            overflow="hidden"
+            boxShadow="md"
+          >
 
-          <Text fontSize={25} fontFamily={'monospace'} align="center" paddingBottom={3}>Check out the announcements below!!!</Text>
-          <Center>
-            <Box paddingLeft={10} fontSize={20}>
-              <OrderedList>
-                {todos.map((todo) => (
-                  <ListItem>{todo.todo}</ListItem>
-                ))}
-              </OrderedList>
-            </Box>
-          </Center>
+            <VStack align="start" spacing="2">
+              <Text fontSize="lg" fontWeight="bold">
+               
+              </Text>
+              <Text></Text>
+              <Divider />
+              <Button colorScheme="blue" size="sm">
+                Hello
+              </Button>
+            </VStack>
+          </Box>
+
+          {/* {todos.map((todo) => (
+                  <Text>{todo.todo}</Text>
+                ))} */}
 
         </GridItem>
 
 
         {/* ANNOUNCEMENT SUBMISSION */}
-
         <GridItem colStart={6} colEnd={7} rowStart={2} rowEnd={5} bg='papayawhip'>
 
           <Center>
             <Box >
-              <AuthPost/>
+              <AuthPost />
             </Box>
           </Center>
 
         </GridItem>
         {/* FOOTER/CONTACT INFORMATION */}
         <GridItem colSpan={6} rowStart={5} backgroundColor={'gray.200'}>
-          <Center>
-            <Box w={500}>
-              <Text fontSize={20} align="center" paddingBottom={3}>Contact Information</Text>
-              <Text>Feel free to message or email me at, ok@ok.com</Text>
-            </Box>
-          </Center>
+
+          <Box w={500} paddingLeft={10}>
+            <Text fontSize={20} paddingBottom={3} className='imported'>Contact Information</Text>
+            <Text>Feel free to message or email me at, ok@ok.com</Text>
+          </Box>
 
         </GridItem>
 
@@ -195,6 +205,7 @@ function App() {
 
 
       </Grid>
+
 
     </ChakraBaseProvider>
   );
