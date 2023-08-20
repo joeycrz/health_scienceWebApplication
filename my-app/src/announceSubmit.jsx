@@ -1,7 +1,18 @@
 import React from 'react';
 import './App.css';
 import './index.css';
-import { Textarea } from '@chakra-ui/react';
+import { ChakraBaseProvider, Textarea } from '@chakra-ui/react';
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverFooter,
+    PopoverArrow,
+    PopoverCloseButton,
+    PopoverAnchor,
+} from '@chakra-ui/react'
 
 import { db } from './firebase';
 import { uid } from 'uid';
@@ -43,9 +54,12 @@ const AnnounceSubmit = () => {
     const writeToDatabase = () => {
         if (title && todo) { // Check if both title and todo are not empty
             const uuid = uid();
+            const currentDate = new Date();
+            const timestamp = currentDate.toLocaleString();
             set(ref(db, `/${uuid}`), {
                 title,
                 todo,
+                timestamp,
                 uuid,
             });
 
@@ -55,21 +69,23 @@ const AnnounceSubmit = () => {
     }
 
     return (
-        <>
-            <div align="center">
+        <ChakraBaseProvider>
 
+            <div align='center'>
                 <input
                     type="text"
                     value={title}
                     onChange={handleTitleChange}
                     placeholder='Enter a title.'
                 />
-
                 <Textarea size='sm' value={todo} onChange={hanldeTodoChange} placeholder='Enter a new announcement.'></Textarea>
 
                 <button onClick={writeToDatabase}>Submit</button>
             </div>
-        </>
+
+
+        </ChakraBaseProvider>
+
     );
 }
 

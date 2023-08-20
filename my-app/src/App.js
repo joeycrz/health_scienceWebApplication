@@ -47,20 +47,24 @@ function App() {
 
   // Read
   useEffect(() => {
-
     onValue(ref(db), snapshot => {
       setTodos([]);
       const data = snapshot.val();
       if (data !== null) {
-        Object.values(data).map(todo => {
-          // setTitle(todo.title);
-          setTodos(oldArray => [...oldArray, todo])
-          setTodos(oldArray => [...oldArray, title])
+        const sortedAnnouncements = Object.values(data).sort((a, b) => {
+          // Assuming that the timestamp property is a valid date string
+          const timestampA = new Date(a.timestamp).getTime();
+          const timestampB = new Date(b.timestamp).getTime();
+          return timestampB - timestampA; // Sort in descending order
         });
+        
+        const titles = sortedAnnouncements.map(todo => todo.title);
+        setTodos(sortedAnnouncements);
+        setTitle(titles);
       }
-    })
-
+    });
   }, []);
+  
 
   // write
   const writeToDatabase = () => {
@@ -92,8 +96,8 @@ function App() {
         {/* ///////////////////////////////////////////// */}
 
         {/* HEADER/TITLE */}
-        <GridItem rowStart={1} rowEnd={2} colStart={2} colEnd={6} bg={'gray.200'}>
-          <Text align={'center'} paddingTop={10} className='imported' fontSize={70} >Health Science Announcements</Text>
+        <GridItem rowStart={1} rowEnd={2} colStart={1} colEnd={6} bg={'gray.200'}>
+          <Text paddingLeft={10} paddingTop={10} className='imported' fontSize={70} >Health Science Announcements</Text>
         </GridItem>
 
         <GridItem rowStart={1} rowEnd={2} colStart={6} colEnd={7} bg={'gray.400'}>
@@ -150,33 +154,41 @@ function App() {
         </GridItem>
 
         {/* ANNOUNCEMENTS CONTENT */}
-        <GridItem colStart={1} colEnd={6} rowStart={2} rowEnd={5} bg='gray.200'>
-          <Box
-            borderWidth="1px"
-            borderColor="gray.300"
-            borderRadius="md"
-            p="4"
-            width="100%"
-            maxW="400px"
-            overflow="hidden"
-            boxShadow="md"
-          >
 
-            <VStack align="start" spacing="2">
-              <Text fontSize="lg" fontWeight="bold">
-               
-              </Text>
-              <Text></Text>
-              <Divider />
-              <Button colorScheme="blue" size="sm">
-                Hello
-              </Button>
-            </VStack>
+        <GridItem colStart={1} colEnd={6} rowStart={2} rowEnd={5} bg='gray.200'>
+
+          <Box padding={15}>
+            <HStack>
+              {todos.map((todo) => (
+                <Box
+                  borderWidth="1px"
+                  borderColor="gray.300"
+                  borderRadius="md"
+                  p="8"
+                  width="100%"
+                  w="350px"
+                  overflow="hidden"
+                  boxShadow="md"
+                  backgroundColor={'white'}
+                >
+                  <VStack align="start" spacing="2">
+                    <Box w="300px" h="200px">
+                      <Text paddingBottom={3} fontSize="lg" fontWeight="bold" >{todo.title}</Text>
+                    
+
+                      <Divider />
+                     
+                      <Text>{todo.todo}</Text>
+
+                      <Text>{todo.timestamp}</Text>
+                    </Box>
+
+                  </VStack>
+                </Box>
+              ))}
+            </HStack>
           </Box>
 
-          {/* {todos.map((todo) => (
-                  <Text>{todo.todo}</Text>
-                ))} */}
 
         </GridItem>
 
@@ -196,7 +208,7 @@ function App() {
 
           <Box w={500} paddingLeft={10}>
             <Text fontSize={20} paddingBottom={3} className='imported'>Contact Information</Text>
-            <Text>Feel free to message or email me at, ok@ok.com</Text>
+            <Text fontWeight={'medium'}>Feel free to message or email me at, ok@ok.com</Text>
           </Box>
 
         </GridItem>
