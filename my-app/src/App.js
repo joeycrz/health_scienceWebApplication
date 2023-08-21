@@ -57,14 +57,14 @@ function App() {
           const timestampB = new Date(b.timestamp).getTime();
           return timestampB - timestampA; // Sort in descending order
         });
-        
+
         const titles = sortedAnnouncements.map(todo => todo.title);
         setTodos(sortedAnnouncements);
         setTitle(titles);
       }
     });
   }, []);
-  
+
 
   // write
   const writeToDatabase = () => {
@@ -96,62 +96,57 @@ function App() {
         {/* ///////////////////////////////////////////// */}
 
         {/* HEADER/TITLE */}
-        <GridItem rowStart={1} rowEnd={2} colStart={1} colEnd={6} bg={'gray.200'}>
-          <Text paddingLeft={10} paddingTop={10} className='imported' fontSize={70} >Health Science Announcements</Text>
-        </GridItem>
-
-        <GridItem rowStart={1} rowEnd={2} colStart={6} colEnd={7} bg={'gray.400'}>
-          <HStack>
-            <Box>
-              <Popover offset={[1, 10]} placement='bottom' isLazy>
-                <Box alignContent={'center'} >
+        <GridItem rowStart={1} rowEnd={2} colStart={1} colEnd={8} bg={'gray.200'}>
+          <HStack paddingTop={5}>
+            <Text paddingLeft={10} className='imported' fontSize={70} >Health Science Announcements</Text>
+            <Spacer />
+            <Box >
+              <Popover offset={[-690, 100]} placement='bottom' isLazy>
+                <Box paddingRight={10} >
                   <PopoverTrigger>
-                    <Button className='ButtonPadding'>
-                      <Text fontWeight={'bold'}>Login</Text>
+                    <Button>
+                      <Text className='imported' fontSize={'20'} fontWeight={'bold'}>Login</Text>
                     </Button>
                   </PopoverTrigger>
                 </Box>
-                <PopoverContent bg={'gray.300'}>
-
-                  <PopoverHeader fontWeight='semibold'>Please enter your login credentials</PopoverHeader>
-                  <PopoverArrow />
-                  {/* <PopoverCloseButton /> */}
-                  <PopoverBody>
-                    <SignIn />
-                  </PopoverBody>
+                <PopoverContent bg={'white'}>
+                  <Box
+                    shadow={'dark-lg'} 
+                    w={500} 
+                    h={400} 
+                    borderStyle={'solid'} borderColor={'black'} borderWidth={3}
+                    >
+                    <SignIn/>
+                  </Box>
                 </PopoverContent>
               </Popover>
             </Box>
-            <Box>
-              <Popover offset={[1, 10]} placement='bottom' isLazy>
-                <Box alignContent={'center'} >
+            <Box paddingRight={20}>
+              <Popover offset={[-790, 100]} placement='bottom' isLazy>
+                <Box >
                   <PopoverTrigger>
-                    <Button className='ButtonPadding'>
-                      <Text fontWeight={'bold'}>Sign Up</Text>
+                    <Button >
+                    <Text className='imported' fontSize={'20'} fontWeight={'bold'}>SignUp</Text>
                     </Button>
                   </PopoverTrigger>
                 </Box>
-                <PopoverContent bg={'red.300'}>
-
-                  <PopoverHeader fontWeight='semibold'>Please enter a username and password.</PopoverHeader>
-                  <PopoverArrow />
-                  {/* <PopoverCloseButton /> */}
-                  <PopoverBody>
-                    <SignUp />
-                  </PopoverBody>
+                <PopoverContent bg={'white'}>
+                  <Box
+                    shadow={'dark-lg'} 
+                    w={500} 
+                    h={400} 
+                    borderStyle={'solid'} borderColor={'black'} borderWidth={3}
+                    >
+                    <SignUp/>
+                  </Box>
                 </PopoverContent>
               </Popover>
             </Box>
+            
           </HStack>
-
-          <Center>
-            <Box paddingTop={20} paddingLeft={10}>
-              <Text fontWeight={'bold'}>
-                <AuthDetails />
-              </Text>
-            </Box>
-          </Center>
         </GridItem>
+
+
 
         {/* ANNOUNCEMENTS CONTENT */}
 
@@ -174,10 +169,10 @@ function App() {
                   <VStack align="start" spacing="2">
                     <Box w="300px" h="200px">
                       <Text paddingBottom={3} fontSize="lg" fontWeight="bold" >{todo.title}</Text>
-                    
+
 
                       <Divider />
-                     
+
                       <Text>{todo.todo}</Text>
 
                       <Text>{todo.timestamp}</Text>

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure
+    ChakraBaseProvider,
+    useDisclosure,
+    Box,
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+    Input,
+    Button,
+
 } from '@chakra-ui/react'
 
 
@@ -35,27 +37,67 @@ const SignUp = () => {
     const finalRef = React.useRef(null)
 
     return (
-        <div class='sign-in-container'>
-            <form onSubmit={signUp}>
+        <ChakraBaseProvider>
+            <Box
+                w={494}
+                h={394}
+                borderWidth="1px"
+                borderRadius="lg"
+                boxShadow="md"
+            >
+                <Box backgroundColor={'red'}>
+                    <form onSubmit={signUp}>
+                        <FormControl id="email">
+                            <FormLabel>Email address</FormLabel>
+                            <Input
+                                type="email"
+                                placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </FormControl>
+
+                        <FormControl mt={4} id="password">
+                            <FormLabel>Password</FormLabel>
+                            <Input
+                                type="password"
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </FormControl>
+
+                        <Button mt={6} type="submit">
+                            Sign Up
+                        </Button>
+                    </form>
+                </Box>
+
+            </Box>
+        </ChakraBaseProvider>
+        // <ChakraBaseProvider>
+        //     <div >
+        //         <form onSubmit={signUp}>
 
 
-                <input
-                    type="email"
-                    placeholder='Enter your email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                ></input>
+        //             <input
+        //                 type="email"
+        //                 placeholder='Enter your email'
+        //                 value={email}
+        //                 onChange={(e) => setEmail(e.target.value)}
+        //             ></input>
 
-                <input
-                    type="password"
-                    placeholder='Enter your password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                ></input>
+        //             <input
+        //                 type="password"
+        //                 placeholder='Enter your password'
+        //                 value={password}
+        //                 onChange={(e) => setPassword(e.target.value)}
+        //             ></input>
 
-                <button type='submit'>Sign Up</button>
-            </form>
-        </div>
+        //             <button type='submit'>Sign Up</button>
+        //         </form>
+        //     </div>
+        // </ChakraBaseProvider>
     )
 }
 
