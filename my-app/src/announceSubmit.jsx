@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import './index.css';
-import { ChakraBaseProvider, Textarea } from '@chakra-ui/react';
+import { ChakraBaseProvider, Container, Button, Input, Textarea } from '@chakra-ui/react';
 import {
     Popover,
     PopoverTrigger,
@@ -12,6 +12,8 @@ import {
     PopoverArrow,
     PopoverCloseButton,
     PopoverAnchor,
+    setIsPopoverOpen,
+    isPopoverOpen,
 } from '@chakra-ui/react'
 
 import { db } from './firebase';
@@ -71,18 +73,33 @@ const AnnounceSubmit = () => {
     return (
         <ChakraBaseProvider>
 
-            <div align='center'>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={handleTitleChange}
-                    placeholder='Enter a title.'
-                />
-                <Textarea size='sm' value={todo} onChange={hanldeTodoChange} placeholder='Enter a new announcement.'></Textarea>
-
-                <button onClick={writeToDatabase}>Submit</button>
-            </div>
-
+            <Container align="center">
+                <Popover>
+                    <PopoverTrigger>
+                        <Button colorScheme="blue">Open Submission Form</Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <PopoverHeader>Announcement Submission</PopoverHeader>
+                        <PopoverBody>
+                            <Input
+                                type="text"
+                                value={title}
+                                onChange={handleTitleChange}
+                                placeholder="Enter a title."
+                            />
+                            <Textarea
+                                size="sm"
+                                value={todo}
+                                onChange={hanldeTodoChange}
+                                placeholder="Enter a new announcement."
+                            />
+                            <Button colorScheme="blue" onClick={writeToDatabase}>
+                                Submit
+                            </Button>
+                        </PopoverBody>
+                    </PopoverContent>
+                </Popover>
+            </Container>
 
         </ChakraBaseProvider>
 

@@ -45,7 +45,11 @@ const SignUp = () => {
                 borderRadius="lg"
                 boxShadow="md"
             >
-                <Box backgroundColor={'red'}>
+                <Box
+                p={20} 
+                h={393}
+                backgroundColor={'gray.400'}
+                >
                     <form onSubmit={signUp}>
                         <FormControl id="email">
                             <FormLabel>Email address</FormLabel>

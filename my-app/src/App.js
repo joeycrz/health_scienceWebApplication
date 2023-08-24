@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import './index.css';
-import { Flex, Image, Divider, Text, ChakraBaseProvider, Stack, SimpleGrid, Spacer, Center, VStack, HStack } from '@chakra-ui/react';
+import { useMediaQuery, Flex, Image, Divider, Text, ChakraBaseProvider, Stack, SimpleGrid, Spacer, Center, VStack, HStack } from '@chakra-ui/react';
 import { Grid, GridItem, Heading, Box, Button, ButtonGroup, StackDivider } from '@chakra-ui/react'
 import { Card, CardBody, CardFooter, CardHeader, CardBodyProps } from '@chakra-ui/react';
 
@@ -83,23 +83,36 @@ function App() {
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
+  // UI CONFIGURATION Responsive(to any screen)
+  const breakpoints = {
+    sm: '30em', // 480px
+    md: '48em', // 768px
+    lg: '62em', // 992px
+    xl: '80em', // 1280px
+    '2xl': '96em', // 1536px
+  }
+
+  const [isLargerThanMd] = useMediaQuery('(min-width: 48em)'); // md breakpoint
+  const colSpanForAnnouncements = isLargerThanMd ? 4 : 6;
+  const colSpanForSubmission = isLargerThanMd ? 2 : 6;
 
   return (
     <ChakraBaseProvider>
       <Grid
-        justifySelf="center"
         bg={'blackAlpha.800'}
         templateColumns='repeat(6, 1fr)'
         templateRows='repeat(5, 1fr)'
-        h='930px'>
-        {/* START OF GRID LAYOUT */}
-        {/* ///////////////////////////////////////////// */}
+        maxH='930px'
+        minHeight="100vh"
+      >
 
         {/* HEADER/TITLE */}
         <GridItem rowStart={1} rowEnd={2} colStart={1} colEnd={8} bg={'gray.200'}>
+
           <HStack paddingTop={5}>
             <Text paddingLeft={10} className='imported' fontSize={70} >Health Science Announcements</Text>
             <Spacer />
+
             <Box >
               <Popover offset={[-690, 100]} placement='bottom' isLazy>
                 <Box paddingRight={10} >
@@ -111,12 +124,13 @@ function App() {
                 </Box>
                 <PopoverContent bg={'white'}>
                   <Box
-                    shadow={'dark-lg'} 
-                    w={500} 
-                    h={400} 
-                    borderStyle={'solid'} borderColor={'black'} borderWidth={3}
-                    >
-                    <SignIn/>
+                    shadow={'dark-lg'}
+                    w={500}
+                    h={400}
+                    borderStyle={'solid'} borderColor={'black'}
+                    borderWidth={4}
+                  >
+                    <SignIn />
                   </Box>
                 </PopoverContent>
               </Popover>
@@ -126,23 +140,32 @@ function App() {
                 <Box >
                   <PopoverTrigger>
                     <Button >
-                    <Text className='imported' fontSize={'20'} fontWeight={'bold'}>SignUp</Text>
+                      <Text className='imported' fontSize={'20'} fontWeight={'bold'}>SignUp</Text>
                     </Button>
                   </PopoverTrigger>
                 </Box>
                 <PopoverContent bg={'white'}>
                   <Box
-                    shadow={'dark-lg'} 
-                    w={500} 
-                    h={400} 
+                    shadow={'dark-lg'}
+                    w={500}
+                    h={400}
                     borderStyle={'solid'} borderColor={'black'} borderWidth={3}
-                    >
-                    <SignUp/>
+                  >
+                    <SignUp />
                   </Box>
                 </PopoverContent>
               </Popover>
             </Box>
-            
+
+          </HStack>
+          <HStack justifyContent={'space-between'} >
+            <Text paddingLeft={10}>
+            <AuthPost/>
+            </Text>
+
+            <Text paddingRight={7}>
+            <AuthDetails />
+            </Text>
           </HStack>
         </GridItem>
 
@@ -150,7 +173,7 @@ function App() {
 
         {/* ANNOUNCEMENTS CONTENT */}
 
-        <GridItem colStart={1} colEnd={6} rowStart={2} rowEnd={5} bg='gray.200'>
+        <GridItem colStart={1} colEnd={8} rowStart={2} rowEnd={5} bg='gray.200'>
 
           <Box padding={15}>
             <HStack>
@@ -189,15 +212,19 @@ function App() {
 
 
         {/* ANNOUNCEMENT SUBMISSION */}
-        <GridItem colStart={6} colEnd={7} rowStart={2} rowEnd={5} bg='papayawhip'>
-
+        {/* <GridItem
+          colSpan={[6, 6, 6, 6, 1]}
+          rowStart={2}
+          rowEnd={5}
+          bg="papayawhip"
+        >
           <Center>
             <Box >
               <AuthPost />
             </Box>
           </Center>
 
-        </GridItem>
+        </GridItem> */}
         {/* FOOTER/CONTACT INFORMATION */}
         <GridItem colSpan={6} rowStart={5} backgroundColor={'gray.200'}>
 
