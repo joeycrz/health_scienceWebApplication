@@ -20,7 +20,7 @@ import {
 
 import { db } from './firebase';
 import { uid } from 'uid';
-import { set, ref, onValue } from 'firebase/database';
+import { set, ref, onValue, update, get } from 'firebase/database';
 import { useState, useEffect } from 'react';
 
 // Database CRUD
@@ -39,6 +39,7 @@ function App() {
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
+
   const hanldeTodoChange = (e) => {
     setTodo(e.target.value);
   }
@@ -52,18 +53,16 @@ function App() {
       const data = snapshot.val();
       if (data !== null) {
         const sortedAnnouncements = Object.values(data).sort((a, b) => {
-          // Assuming that the timestamp property is a valid date string
           const timestampA = new Date(a.timestamp).getTime();
           const timestampB = new Date(b.timestamp).getTime();
-          return timestampB - timestampA; // Sort in descending order
+          return timestampB - timestampA;
         });
 
-        const titles = sortedAnnouncements.map(todo => todo.title);
         setTodos(sortedAnnouncements);
-        setTitle(titles);
       }
     });
   }, []);
+
 
 
   // write
@@ -77,6 +76,17 @@ function App() {
     setTodo("");
   }
 
+  const handleLike = (uuid) => {
+    const todoRef = ref(db, uuid);
+    get(todoRef).then((snapshot) => {
+      const todoData = snapshot.val();
+      if (todoData) {
+        const currentLikes = todoData.likes || 0;
+        update(ref(db, uuid), { likes: currentLikes + 1 });
+      }
+    });
+  };
+  
 
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -105,93 +115,91 @@ function App() {
       >
         {/* HEADER/TITLE */}
         <GridItem rowStart={1} rowEnd={2} colStart={1} colEnd={8} bg={'gray.200'}>
-        <HStack
-  paddingTop={[2, 5]} // Adjust padding based on breakpoints
-  flexDirection={['column', 'row']} // Stack elements vertically on small screens, horizontally on larger screens
-  alignItems={['center', 'flex-start']} // Center elements vertically on small screens, align to the start on larger screens
->
-  <Text
-    paddingLeft={[0, 10]} // Remove left padding on small screens, add padding on larger screens
-    className='imported'
-    fontSize={[40, 70]} // Adjust font size based on breakpoints
-    textAlign={['center', 'left']} // Center text on small screens, align to the left on larger screens
-  >
-    Health Science Announcements
-  </Text>
-  <Spacer />
-  <HStack
-    alignItems={['center', 'flex-start']} // Align items to center on small screens, to start on larger screens
-    marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
-  >
-    {/* Login Button */}
-    <Popover offset={[-690, 100]} placement='bottom' isLazy>
-      <Box paddingRight={10} >
-        <PopoverTrigger>
-          <Button>
-            <Text className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
-              Login
+          <HStack
+            paddingTop={[2, 5]} // Adjust padding based on breakpoints
+            flexDirection={['column', 'row']} // Stack elements vertically on small screens, horizontally on larger screens
+            alignItems={['center', 'flex-start']} // Center elements vertically on small screens, align to the start on larger screens
+          >
+            <Text
+              paddingLeft={[0, 10]} // Remove left padding on small screens, add padding on larger screens
+              className='imported'
+              fontSize={[40, 70]} // Adjust font size based on breakpoints
+              textAlign={['center', 'left']} // Center text on small screens, align to the left on larger screens
+            >
+              Health Science Announcements
             </Text>
-          </Button>
-        </PopoverTrigger>
-      </Box>
-      <PopoverContent bg={'white'}>
-        <Box
-          shadow={'dark-lg'}
-          w={500}
-          h={400}
-          borderStyle={'solid'}
-          borderColor={'black'}
-          borderWidth={4}
-        >
-          <SignIn />
-        </Box>
-      </PopoverContent>
-    </Popover>
+            <Spacer />
+            <HStack
+              alignItems={['center', 'flex-start']} // Align items to center on small screens, to start on larger screens
+              marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
+            >
+              {/* Login Button */}
+              <Popover offset={[-690, 100]} placement='bottom' isLazy>
+                <Box paddingRight={10} >
+                  <PopoverTrigger>
+                    <Button>
+                      <Text className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
+                        Login
+                      </Text>
+                    </Button>
+                  </PopoverTrigger>
+                </Box>
+                <PopoverContent bg={'white'}>
+                  <Box
+                    shadow={'dark-lg'}
+                    w={500}
+                    h={400}
+                    borderStyle={'solid'}
+                    borderColor={'black'}
+                    borderWidth={4}
+                  >
+                    <SignIn />
+                  </Box>
+                </PopoverContent>
+              </Popover>
 
-    {/* SignUp Button */}
-    <Popover offset={[-790, 100]} placement='bottom' isLazy>
-      <Box>
-        <PopoverTrigger>
-          <Button>
-            <Text className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
-              SignUp
+              {/* SignUp Button */}
+              <Popover offset={[-790, 100]} placement='bottom' isLazy>
+                <Box>
+                  <PopoverTrigger>
+                    <Button>
+                      <Text className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
+                        SignUp
+                      </Text>
+                    </Button>
+                  </PopoverTrigger>
+                </Box>
+                <PopoverContent bg={'white'}>
+                  <Box
+                    shadow={'dark-lg'}
+                    w={500}
+                    h={400}
+                    borderStyle={'solid'}
+                    borderColor={'black'}
+                    borderWidth={3}
+                  >
+                    <SignUp />
+                  </Box>
+                </PopoverContent>
+              </Popover>
+            </HStack>
+          </HStack>
+          <HStack
+            justifyContent={['center', 'space-between']} // Center content on small screens, distribute space on larger screens
+            marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
+          >
+            <Text
+              paddingLeft={[0, 10]} // Remove left padding on small screens, add padding on larger screens
+              textAlign={['center', 'left']} // Center text on small screens, align to the left on larger screens
+            >
+              <AuthPost />
             </Text>
-          </Button>
-        </PopoverTrigger>
-      </Box>
-      <PopoverContent bg={'white'}>
-        <Box
-          shadow={'dark-lg'}
-          w={500}
-          h={400}
-          borderStyle={'solid'}
-          borderColor={'black'}
-          borderWidth={3}
-        >
-          <SignUp />
-        </Box>
-      </PopoverContent>
-    </Popover>
-  </HStack>
-</HStack>
-<HStack
-  justifyContent={['center', 'space-between']} // Center content on small screens, distribute space on larger screens
-  marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
->
-  <Text
-    paddingLeft={[0, 10]} // Remove left padding on small screens, add padding on larger screens
-    textAlign={['center', 'left']} // Center text on small screens, align to the left on larger screens
-  >
-    <AuthPost/>
-  </Text>
-  <Text
-    paddingRight={[0, 7]} // Remove right padding on small screens, add padding on larger screens
-  >
-    <AuthDetails />
-  </Text>
-</HStack>
-
-
+            <Text
+              paddingRight={[0, 7]} // Remove right padding on small screens, add padding on larger screens
+            >
+              <AuthDetails />
+            </Text>
+          </HStack>
         </GridItem>
 
         {/* ANNOUNCEMENTS CONTENT */}
@@ -209,6 +217,7 @@ function App() {
                   overflow="hidden"
                   boxShadow="md"
                   backgroundColor={'white'}
+                  key={todo.uuid}
                 >
                   <VStack align="start" spacing="2">
                     <Box w="300px" h="200px">
@@ -220,6 +229,9 @@ function App() {
                       <Text>{todo.todo}</Text>
 
                       <Text>{todo.timestamp}</Text>
+                      <Button colorScheme="teal" onClick={() => handleLike(todo.uuid)}>
+                        Like ({todo.likes || 0})
+                      </Button>
                     </Box>
 
                   </VStack>
