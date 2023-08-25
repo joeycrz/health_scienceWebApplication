@@ -92,89 +92,110 @@ function App() {
     '2xl': '96em', // 1536px
   }
 
-  const [isLargerThanMd] = useMediaQuery('(min-width: 48em)'); // md breakpoint
-  const colSpanForAnnouncements = isLargerThanMd ? 4 : 6;
-  const colSpanForSubmission = isLargerThanMd ? 2 : 6;
 
   return (
     <ChakraBaseProvider>
       <Grid
-        bg={'blackAlpha.800'}
+        bg={'gray.200'}
         templateColumns='repeat(6, 1fr)'
         templateRows='repeat(5, 1fr)'
         maxH='930px'
         minHeight="100vh"
+        p={1} // Added padding for responsiveness
       >
-
         {/* HEADER/TITLE */}
         <GridItem rowStart={1} rowEnd={2} colStart={1} colEnd={8} bg={'gray.200'}>
-
-          <HStack paddingTop={5}>
-            <Text paddingLeft={10} className='imported' fontSize={70} >Health Science Announcements</Text>
-            <Spacer />
-
-            <Box >
-              <Popover offset={[-690, 100]} placement='bottom' isLazy>
-                <Box paddingRight={10} >
-                  <PopoverTrigger>
-                    <Button>
-                      <Text className='imported' fontSize={'20'} fontWeight={'bold'}>Login</Text>
-                    </Button>
-                  </PopoverTrigger>
-                </Box>
-                <PopoverContent bg={'white'}>
-                  <Box
-                    shadow={'dark-lg'}
-                    w={500}
-                    h={400}
-                    borderStyle={'solid'} borderColor={'black'}
-                    borderWidth={4}
-                  >
-                    <SignIn />
-                  </Box>
-                </PopoverContent>
-              </Popover>
-            </Box>
-            <Box paddingRight={20}>
-              <Popover offset={[-790, 100]} placement='bottom' isLazy>
-                <Box >
-                  <PopoverTrigger>
-                    <Button >
-                      <Text className='imported' fontSize={'20'} fontWeight={'bold'}>SignUp</Text>
-                    </Button>
-                  </PopoverTrigger>
-                </Box>
-                <PopoverContent bg={'white'}>
-                  <Box
-                    shadow={'dark-lg'}
-                    w={500}
-                    h={400}
-                    borderStyle={'solid'} borderColor={'black'} borderWidth={3}
-                  >
-                    <SignUp />
-                  </Box>
-                </PopoverContent>
-              </Popover>
-            </Box>
-
-          </HStack>
-          <HStack justifyContent={'space-between'} >
-            <Text paddingLeft={10}>
-            <AuthPost/>
+        <HStack
+  paddingTop={[2, 5]} // Adjust padding based on breakpoints
+  flexDirection={['column', 'row']} // Stack elements vertically on small screens, horizontally on larger screens
+  alignItems={['center', 'flex-start']} // Center elements vertically on small screens, align to the start on larger screens
+>
+  <Text
+    paddingLeft={[0, 10]} // Remove left padding on small screens, add padding on larger screens
+    className='imported'
+    fontSize={[40, 70]} // Adjust font size based on breakpoints
+    textAlign={['center', 'left']} // Center text on small screens, align to the left on larger screens
+  >
+    Health Science Announcements
+  </Text>
+  <Spacer />
+  <HStack
+    alignItems={['center', 'flex-start']} // Align items to center on small screens, to start on larger screens
+    marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
+  >
+    {/* Login Button */}
+    <Popover offset={[-690, 100]} placement='bottom' isLazy>
+      <Box paddingRight={10} >
+        <PopoverTrigger>
+          <Button>
+            <Text className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
+              Login
             </Text>
+          </Button>
+        </PopoverTrigger>
+      </Box>
+      <PopoverContent bg={'white'}>
+        <Box
+          shadow={'dark-lg'}
+          w={500}
+          h={400}
+          borderStyle={'solid'}
+          borderColor={'black'}
+          borderWidth={4}
+        >
+          <SignIn />
+        </Box>
+      </PopoverContent>
+    </Popover>
 
-            <Text paddingRight={7}>
-            <AuthDetails />
+    {/* SignUp Button */}
+    <Popover offset={[-790, 100]} placement='bottom' isLazy>
+      <Box>
+        <PopoverTrigger>
+          <Button>
+            <Text className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
+              SignUp
             </Text>
-          </HStack>
+          </Button>
+        </PopoverTrigger>
+      </Box>
+      <PopoverContent bg={'white'}>
+        <Box
+          shadow={'dark-lg'}
+          w={500}
+          h={400}
+          borderStyle={'solid'}
+          borderColor={'black'}
+          borderWidth={3}
+        >
+          <SignUp />
+        </Box>
+      </PopoverContent>
+    </Popover>
+  </HStack>
+</HStack>
+<HStack
+  justifyContent={['center', 'space-between']} // Center content on small screens, distribute space on larger screens
+  marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
+>
+  <Text
+    paddingLeft={[0, 10]} // Remove left padding on small screens, add padding on larger screens
+    textAlign={['center', 'left']} // Center text on small screens, align to the left on larger screens
+  >
+    <AuthPost/>
+  </Text>
+  <Text
+    paddingRight={[0, 7]} // Remove right padding on small screens, add padding on larger screens
+  >
+    <AuthDetails />
+  </Text>
+</HStack>
+
+
         </GridItem>
 
-
-
         {/* ANNOUNCEMENTS CONTENT */}
-
-        <GridItem colStart={1} colEnd={8} rowStart={2} rowEnd={5} bg='gray.200'>
-
+        <GridItem colStart={1} colEnd={8} rowStart={[2, null, 2]} rowEnd={5} bg='gray.200'>
           <Box padding={15}>
             <HStack>
               {todos.map((todo) => (
@@ -206,40 +227,16 @@ function App() {
               ))}
             </HStack>
           </Box>
-
-
         </GridItem>
 
-
-        {/* ANNOUNCEMENT SUBMISSION */}
-        {/* <GridItem
-          colSpan={[6, 6, 6, 6, 1]}
-          rowStart={2}
-          rowEnd={5}
-          bg="papayawhip"
-        >
-          <Center>
-            <Box >
-              <AuthPost />
-            </Box>
-          </Center>
-
-        </GridItem> */}
         {/* FOOTER/CONTACT INFORMATION */}
         <GridItem colSpan={6} rowStart={5} backgroundColor={'gray.200'}>
-
-          <Box w={500} paddingLeft={10}>
+          <Box paddingLeft={[0, 10]} maxW={500}>
             <Text fontSize={20} paddingBottom={3} className='imported'>Contact Information</Text>
             <Text fontWeight={'medium'}>Feel free to message or email me at, ok@ok.com</Text>
           </Box>
-
         </GridItem>
-
-
-
-
       </Grid>
-
 
     </ChakraBaseProvider>
   );
