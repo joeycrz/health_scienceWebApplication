@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
-import { ChakraBaseProvider } from "@chakra-ui/react";
+import { ChakraBaseProvider, Text, Box, Button, Divider } from "@chakra-ui/react";
+
 
 
 const AuthDetails = () => {
@@ -29,16 +30,32 @@ const AuthDetails = () => {
         }).catch(error => console.log(error))
     }
     return (
-        <div>
+        <ChakraBaseProvider>
+
             {authUser ? (
                 <>
-                    <span>{`Signed In as ${authUser.email} `}</span>
-                    <button onClick={userSignOut}>Sign Out</button>
+                    {/* <Text className="imported">{`Signed In as ${authUser.email} `}</Text> */}
+                    
+                    <Button onClick={userSignOut}>
+                        <Box 
+                        backgroundColor={'gray.400'}
+                        borderStyle={'rounded'}
+                        >
+                            <Text p={'1'} className="imported" >Sign Out</Text>
+                        </Box>
+
+                        
+   
+                    </Button>
                 </>
             ) : (
-                <span>You are currently signed out.</span>
+                <>
+              
+                <Text className="imported">You are currently signed out.</Text>
+                </>
             )}
-        </div>
+
+        </ChakraBaseProvider>
 
     )
 }

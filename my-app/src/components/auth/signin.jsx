@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChakraProvider, Box, FormControl, FormLabel, Input, Button, Text } from '@chakra-ui/react';
+import { ChakraBaseProvider, Box, FormControl, FormLabel, Input, Button, Text } from '@chakra-ui/react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 
@@ -22,9 +22,9 @@ const SignIn = () => {
     }
 
     return (
-        <ChakraProvider>
+        <ChakraBaseProvider>
             <Box p={10}>
-                <Text fontSize={20} paddingLeft={5} paddingBottom={5}>Sign In</Text>
+                <Text className='imported' fontSize={20} paddingLeft={5} paddingBottom={5} key={'signIn'}>Sign In</Text>
                 {signInStatus === 'success' ? (
                     <Text color="green.500">Sign-in successful! Box is closed.</Text>
                 ) : (
@@ -67,17 +67,17 @@ const SignIn = () => {
                             </Box>
                         </FormControl>
                         <Button mt={6} type="submit">
-                            <Box backgroundColor='gray.300'>
-                                <Text p={2}>Login</Text>
+                            <Box backgroundColor={'gray.300'}>
+                                <Text p={2} className='imported'>Login</Text>
                             </Box>
                         </Button>
-                        {signInStatus === 'error' && (
+                        {/* {signInStatus === 'error' && (
                             <Text color="red.500" mt={3}>{errorMessage}</Text>
-                        )}
+                        )} */}
                     </form>
                 )}
             </Box>
-        </ChakraProvider>
+        </ChakraBaseProvider>
     )
 }
 

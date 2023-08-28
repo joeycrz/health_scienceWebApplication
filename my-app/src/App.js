@@ -83,16 +83,16 @@ function App() {
 
   const handleLike = (uuid, userEmail) => {
     const todoRef = ref(db, uuid);
-    
+
     get(todoRef).then((snapshot) => {
       const todoData = snapshot.val();
       if (todoData) {
         const currentLikes = todoData.likes || 0;
-        
+
         // Check if the user has already liked the post
         if (!todoData.likesBy || !todoData.likesBy[userEmail]) {
           const updatedLikes = currentLikes + 1;
-          
+
           // Update likes count and add the user's email to likesBy
           update(ref(db, uuid), {
             likes: updatedLikes,
@@ -102,7 +102,7 @@ function App() {
       }
     });
   };
-  
+
 
 
 
@@ -205,12 +205,29 @@ function App() {
             justifyContent={['center', 'space-between']} // Center content on small screens, distribute space on larger screens
             marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
           >
-            <Text
-              paddingLeft={[0, 10]} // Remove left padding on small screens, add padding on larger screens
-              textAlign={['center', 'left']} // Center text on small screens, align to the left on larger screens
-            >
-              <AuthPost />
-            </Text>
+            <Popover offset={[500, 100]} placement='bottom' isLazy>
+              <Box>
+                <PopoverTrigger>
+                  <Button>
+                    <Text paddingLeft={5} className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
+                      Post Form
+                    </Text>
+                  </Button>
+                </PopoverTrigger>
+              </Box>
+              <PopoverContent bg={'white'}>
+                <Box
+                  shadow={'dark-lg'}
+                  w={500}
+                  h={400}
+                  borderStyle={'solid'}
+                  borderColor={'black'}
+                  borderWidth={3}
+                >
+                  <AuthPost />
+                </Box>
+              </PopoverContent>
+            </Popover>
             <Text
               paddingRight={[0, 7]} // Remove right padding on small screens, add padding on larger screens
             >

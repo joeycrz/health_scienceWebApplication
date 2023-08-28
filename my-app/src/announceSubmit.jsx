@@ -2,7 +2,10 @@ import React from 'react';
 import './App.css';
 import './index.css';
 import { ChakraBaseProvider, Container, Button, Input, Textarea } from '@chakra-ui/react';
+import {Box, Text, } from '@chakra-ui/react';
 import {
+    FormControl,
+    FormLabel,
     Popover,
     PopoverTrigger,
     PopoverContent,
@@ -73,33 +76,60 @@ const AnnounceSubmit = () => {
     return (
         <ChakraBaseProvider>
 
-            <Container align="center">
-                <Popover>
-                    <PopoverTrigger>
-                        <Button colorScheme="blue">Post Announcement Form</Button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                        <PopoverHeader>Announcement Submission</PopoverHeader>
-                        <PopoverBody>
+            <Box p={10}>
+            <Text fontSize={20} className='imported' paddingLeft={5} paddingBottom={5} key={'signUp'}>Post Announcement Form</Text>
+
+                <form >
+                    <FormControl >
+                        <Box
+                            p={3}
+                            borderStyle={'ridge'}
+                            borderColor={'gray.700'}
+                            borderWidth={3}
+                        >
+                            <FormLabel>
+                                <Text paddingBottom={3} className='imported'>Title</Text>
+                            </FormLabel>
                             <Input
                                 type="text"
+                                placeholder="Enter a title for the post."
                                 value={title}
                                 onChange={handleTitleChange}
-                                placeholder="Enter a title."
+                                width={300}
                             />
-                            <Textarea
-                                size="sm"
+                        </Box>
+                    </FormControl>
+
+                    <FormControl mt={4} >
+                        <Box
+                            p={3}
+                            borderStyle={'ridge'}
+                            borderColor={'gray.700'}
+                            borderWidth={3}
+                        >
+                            <FormLabel>
+                                <Text paddingBottom={3} className='imported'>Description</Text>
+                            </FormLabel>
+                            <Input
+                                type="text"
+                                placeholder="Enter a description for the post."
                                 value={todo}
                                 onChange={hanldeTodoChange}
-                                placeholder="Enter a new announcement."
+                                width={300}
                             />
-                            <Button onClick={writeToDatabase}>
-                                Submit
-                            </Button>
-                        </PopoverBody>
-                    </PopoverContent>
-                </Popover>
-            </Container>
+
+                        </Box>
+                    </FormControl>
+
+                    <Button
+                        mt={6}
+                        onClick={writeToDatabase}>
+                        <Box backgroundColor={'gray.300'}>
+                            <Text p={2} className='imported'>Post</Text>
+                        </Box>
+                    </Button>
+                </form>
+            </Box>
 
         </ChakraBaseProvider>
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { ChakraBaseProvider } from "@chakra-ui/react";
+import { ChakraBaseProvider, Text, Box,  } from "@chakra-ui/react";
 
 import AnnounceSubmit from "../announceSubmit";
 
@@ -34,7 +34,7 @@ const AuthPost = () => {
             {authUser ? (
                 <AnnounceSubmit />
             ) : (
-                <p>You are currently signed out and do not have permission to post announcements.</p>
+                <Text className="imported">You do not have permission to post. </Text>
             )}
         </ChakraBaseProvider>
 

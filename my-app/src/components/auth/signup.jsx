@@ -42,7 +42,7 @@ const SignUp = () => {
         <ChakraBaseProvider>
 
             <Box p={10}>
-            <Text fontSize={20} className='imported' paddingLeft={5} paddingBottom={5}>Sign Up</Text>
+            <Text fontSize={20} className='imported' paddingLeft={5} paddingBottom={5} key={'signUp'}>Sign Up</Text>
 
                 <form onSubmit={signUp}>
                     <FormControl id="email">
