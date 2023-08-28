@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
+import { ChakraBaseProvider } from "@chakra-ui/react";
+
 
 const AuthDetails = () => {
     const [authUser, setAuthUser] = useState(null);
@@ -30,7 +32,7 @@ const AuthDetails = () => {
         <div>
             {authUser ? (
                 <>
-                    <span>{`Signed In as ${authUser.email}`}</span>
+                    <span>{`Signed In as ${authUser.email} `}</span>
                     <button onClick={userSignOut}>Sign Out</button>
                 </>
             ) : (

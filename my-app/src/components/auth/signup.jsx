@@ -9,12 +9,14 @@ import {
     FormHelperText,
     Input,
     Button,
+    Text,
 
 } from '@chakra-ui/react'
 
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
+import { Container } from 'react-bootstrap';
 const SignUp = () => {
 
     const [email, setEmail] = useState('');
@@ -38,70 +40,61 @@ const SignUp = () => {
 
     return (
         <ChakraBaseProvider>
-            <Box
-                w={494}
-                h={394}
-                borderWidth="1px"
-                borderRadius="lg"
-                boxShadow="md"
-            >
-                <Box
-                p={20} 
-                h={393}
-                backgroundColor={'gray.400'}
-                >
-                    <form onSubmit={signUp}>
-                        <FormControl id="email">
-                            <FormLabel>Email address</FormLabel>
+
+            <Box p={10}>
+            <Text fontSize={20} className='imported' paddingLeft={5} paddingBottom={5}>Sign Up</Text>
+
+                <form onSubmit={signUp}>
+                    <FormControl id="email">
+                        <Box
+                            p={3}
+                            borderStyle={'ridge'}
+                            borderColor={'gray.700'}
+                            borderWidth={3}
+                        >
+                            <FormLabel>
+                                <Text paddingBottom={3} className='imported'>Email Address</Text>
+                            </FormLabel>
                             <Input
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder="Enter a username or pass"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                        </FormControl>
+                        </Box>
+                    </FormControl>
 
-                        <FormControl mt={4} id="password">
-                            <FormLabel>Password</FormLabel>
+                    <FormControl mt={4} id="password">
+                        <Box
+                            p={3}
+                            borderStyle={'ridge'}
+                            borderColor={'gray.700'}
+                            borderWidth={3}
+                        >
+                            <FormLabel>
+                                <Text paddingBottom={3} className='imported'>Password</Text>
+                            </FormLabel>
                             <Input
                                 type="password"
-                                placeholder="Enter your password"
+                                placeholder="Create your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                        </FormControl>
 
-                        <Button mt={6} type="submit">
-                            Sign Up
-                        </Button>
-                    </form>
-                </Box>
+                        </Box>
+                    </FormControl>
 
+                    <Button
+                        mt={6} type="submit">
+                        <Box backgroundColor={'gray.300'}>
+                            <Text p={2} className='imported'>Create Account</Text>
+                        </Box>
+                    </Button>
+                </form>
             </Box>
+
         </ChakraBaseProvider>
-        // <ChakraBaseProvider>
-        //     <div >
-        //         <form onSubmit={signUp}>
 
-
-        //             <input
-        //                 type="email"
-        //                 placeholder='Enter your email'
-        //                 value={email}
-        //                 onChange={(e) => setEmail(e.target.value)}
-        //             ></input>
-
-        //             <input
-        //                 type="password"
-        //                 placeholder='Enter your password'
-        //                 value={password}
-        //                 onChange={(e) => setPassword(e.target.value)}
-        //             ></input>
-
-        //             <button type='submit'>Sign Up</button>
-        //         </form>
-        //     </div>
-        // </ChakraBaseProvider>
     )
 }
 

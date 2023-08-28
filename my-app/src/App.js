@@ -3,7 +3,8 @@ import './App.css';
 import './index.css';
 import { useMediaQuery, Flex, Image, Divider, Text, ChakraBaseProvider, Stack, SimpleGrid, Spacer, Center, VStack, HStack } from '@chakra-ui/react';
 import { Grid, GridItem, Heading, Box, Button, ButtonGroup, StackDivider } from '@chakra-ui/react'
-import { Card, CardBody, CardFooter, CardHeader, CardBodyProps } from '@chakra-ui/react';
+import { Card, Icon, IconButton, CardBody, CardFooter, CardHeader, CardBodyProps } from '@chakra-ui/react';
+
 
 import {
   Popover,
@@ -21,6 +22,8 @@ import {
 import { db } from './firebase';
 import { uid } from 'uid';
 import { set, ref, onValue, update, get } from 'firebase/database';
+import { getAuth, onAuthStateChanged, listUsers } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import { useState, useEffect } from 'react';
 
 // Database CRUD
@@ -30,21 +33,23 @@ import './announceSubmit';
 import SignIn from './components/auth/signin';
 import SignUp from './components/auth/signup';
 import AuthDetails from './components/authDetails';
-import { Container } from 'react-bootstrap';
 import AnnounceSubmit from './announceSubmit';
 import AuthPost from './components/authPost';
+
+
+import { ViewIcon } from '@chakra-ui/icons';
+
+
+
 function App() {
 
   const [title, setTitle] = useState("");
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
-
   const hanldeTodoChange = (e) => {
     setTodo(e.target.value);
   }
-
-
 
   // Read
   useEffect(() => {
@@ -76,17 +81,29 @@ function App() {
     setTodo("");
   }
 
-  const handleLike = (uuid) => {
+  const handleLike = (uuid, userEmail) => {
     const todoRef = ref(db, uuid);
+    
     get(todoRef).then((snapshot) => {
       const todoData = snapshot.val();
       if (todoData) {
         const currentLikes = todoData.likes || 0;
-        update(ref(db, uuid), { likes: currentLikes + 1 });
+        
+        // Check if the user has already liked the post
+        if (!todoData.likesBy || !todoData.likesBy[userEmail]) {
+          const updatedLikes = currentLikes + 1;
+          
+          // Update likes count and add the user's email to likesBy
+          update(ref(db, uuid), {
+            likes: updatedLikes,
+            [`likesBy/${userEmail}`]: true
+          });
+        }
       }
     });
   };
   
+
 
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -151,7 +168,7 @@ function App() {
                     h={400}
                     borderStyle={'solid'}
                     borderColor={'black'}
-                    borderWidth={4}
+                    borderWidth={3}
                   >
                     <SignIn />
                   </Box>
@@ -203,21 +220,21 @@ function App() {
         </GridItem>
 
         {/* ANNOUNCEMENTS CONTENT */}
-        <GridItem colStart={1} colEnd={8} rowStart={[2, null, 2]} rowEnd={5} bg='gray.200'>
-          <Box padding={15}>
-            <HStack>
+        <GridItem colStart={1} colEnd={8} rowStart={[2, null, 2]} rowEnd={5} bg="gray.200">
+          <Box padding={15} overflowX="auto">
+            <HStack css={{ display: "flex", flexWrap: "nowrap", padding: "10px 0" }}>
               {todos.map((todo) => (
                 <Box
                   borderWidth="1px"
                   borderColor="gray.300"
                   borderRadius="md"
                   p="8"
-                  width="100%"
-                  w="350px"
-                  overflow="hidden"
+                  width="350px"
+                  minWidth="350px" // Ensure each item has a fixed width
                   boxShadow="md"
-                  backgroundColor={'white'}
+                  backgroundColor={"white"}
                   key={todo.uuid}
+                  marginRight="20px" // Add some space between items
                 >
                   <VStack align="start" spacing="2">
                     <Box w="300px" h="200px">
@@ -229,9 +246,11 @@ function App() {
                       <Text>{todo.todo}</Text>
 
                       <Text>{todo.timestamp}</Text>
-                      <Button colorScheme="teal" onClick={() => handleLike(todo.uuid)}>
-                        Like ({todo.likes || 0})
-                      </Button>
+                      <HStack>
+                        <IconButton icon={<ViewIcon />} onClick={() => handleLike(todo.uuid)} />
+                        <Text fontSize={15}>[{todo.likes || 0}]</Text>
+                      </HStack>
+
                     </Box>
 
                   </VStack>

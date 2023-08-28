@@ -76,7 +76,7 @@ const AnnounceSubmit = () => {
             <Container align="center">
                 <Popover>
                     <PopoverTrigger>
-                        <Button colorScheme="blue">Open Submission Form</Button>
+                        <Button colorScheme="blue">Post Announcement Form</Button>
                     </PopoverTrigger>
                     <PopoverContent>
                         <PopoverHeader>Announcement Submission</PopoverHeader>
@@ -93,7 +93,7 @@ const AnnounceSubmit = () => {
                                 onChange={hanldeTodoChange}
                                 placeholder="Enter a new announcement."
                             />
-                            <Button colorScheme="blue" onClick={writeToDatabase}>
+                            <Button onClick={writeToDatabase}>
                                 Submit
                             </Button>
                         </PopoverBody>
