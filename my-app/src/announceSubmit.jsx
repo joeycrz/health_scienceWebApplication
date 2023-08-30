@@ -6,17 +6,7 @@ import {Box, Text, } from '@chakra-ui/react';
 import {
     FormControl,
     FormLabel,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverBody,
-    PopoverFooter,
-    PopoverArrow,
-    PopoverCloseButton,
-    PopoverAnchor,
-    setIsPopoverOpen,
-    isPopoverOpen,
+    
 } from '@chakra-ui/react'
 
 import { db } from './firebase';
@@ -31,6 +21,7 @@ import './announceSubmit';
 const AnnounceSubmit = () => {
     const [title, setTitle] = useState("");
     const [todo, setTodo] = useState("");
+    const [content, setContent] = useState("");
     const [todos, setTodos] = useState([]);
 
     const hanldeTodoChange = (e) => {
@@ -39,6 +30,10 @@ const AnnounceSubmit = () => {
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
+    }
+
+    const handleContentChange = (e) => {
+        setContent(e.target.value)
     }
 
     // Read

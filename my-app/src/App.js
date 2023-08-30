@@ -19,6 +19,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 
+
 import { db } from './firebase';
 import { uid } from 'uid';
 import { set, ref, onValue, update, get } from 'firebase/database';
@@ -36,9 +37,7 @@ import AuthDetails from './components/authDetails';
 import AnnounceSubmit from './announceSubmit';
 import AuthPost from './components/authPost';
 
-
 import { ViewIcon } from '@chakra-ui/icons';
-
 
 
 function App() {
@@ -80,30 +79,6 @@ function App() {
 
     setTodo("");
   }
-
-  const handleLike = (uuid, userEmail) => {
-    const todoRef = ref(db, uuid);
-
-    get(todoRef).then((snapshot) => {
-      const todoData = snapshot.val();
-      if (todoData) {
-        const currentLikes = todoData.likes || 0;
-
-        // Check if the user has already liked the post
-        if (!todoData.likesBy || !todoData.likesBy[userEmail]) {
-          const updatedLikes = currentLikes + 1;
-
-          // Update likes count and add the user's email to likesBy
-          update(ref(db, uuid), {
-            likes: updatedLikes,
-            [`likesBy/${userEmail}`]: true
-          });
-        }
-      }
-    });
-  };
-
-
 
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -176,8 +151,8 @@ function App() {
               </Popover>
 
               {/* SignUp Button */}
-              <Popover offset={[-790, 100]} placement='bottom' isLazy>
-                <Box>
+              <Popover visibility={'hidden'} offset={[-790, 100]} placement='bottom' isLazy>
+                <Box visibility={'hidden'}>
                   <PopoverTrigger>
                     <Button>
                       <Text className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
@@ -209,7 +184,7 @@ function App() {
               <Box>
                 <PopoverTrigger>
                   <Button>
-                    <Text paddingLeft={5} className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
+                    <Text paddingLeft={12} className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
                       Post Form
                     </Text>
                   </Button>
@@ -223,6 +198,7 @@ function App() {
                   borderStyle={'solid'}
                   borderColor={'black'}
                   borderWidth={3}
+                  
                 >
                   <AuthPost />
                 </Box>
@@ -257,15 +233,14 @@ function App() {
                     <Box w="300px" h="200px">
                       <Text paddingBottom={3} fontSize="lg" fontWeight="bold" >{todo.title}</Text>
 
-
                       <Divider />
 
                       <Text>{todo.todo}</Text>
 
                       <Text>{todo.timestamp}</Text>
                       <HStack>
-                        <IconButton icon={<ViewIcon />} onClick={() => handleLike(todo.uuid)} />
-                        <Text fontSize={15}>[{todo.likes || 0}]</Text>
+                        
+                        
                       </HStack>
 
                     </Box>
