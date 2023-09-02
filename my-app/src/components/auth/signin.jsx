@@ -23,11 +23,9 @@ const SignIn = () => {
 
     return (
         <ChakraBaseProvider>
-            <Box p={10}>
-                <Text className='imported' fontSize={20} paddingLeft={5} paddingBottom={5} key={'signIn'}>Sign In</Text>
-                {signInStatus === 'success' ? (
-                    <Text color="green.500">Sign-in successful! Box is closed.</Text>
-                ) : (
+            <Box p={10}  w={[300,500]}>
+                <Text className='imported' fontSize={20} paddingLeft={5} paddingBottom={5} key={'signIn'}>Log In</Text>
+                
                     <form onSubmit={signIn}>
                         <FormControl id="email">
                             <Box
@@ -75,7 +73,7 @@ const SignIn = () => {
                             <Text color="red.500" mt={3}>{errorMessage}</Text>
                         )} */}
                     </form>
-                )}
+                
             </Box>
         </ChakraBaseProvider>
     )

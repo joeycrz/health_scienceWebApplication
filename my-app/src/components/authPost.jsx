@@ -29,15 +29,20 @@ const AuthPost = () => {
 
         }).catch(error => console.log(error))
     }
+
+
     return (
         <ChakraBaseProvider>
             {authUser ? (
+                
                 <AnnounceSubmit />
             ) : (
-                <Text className="imported">You do not have permission to post. </Text>
+                <Box>
+                    <Text p={[5,20]} fontSize={[15,20]} className="imported">You do not have permission to post.</Text>
+                </Box>
+                
             )}
         </ChakraBaseProvider>
-
 
     )
 }

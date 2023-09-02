@@ -4,6 +4,8 @@ import './index.css';
 import { useMediaQuery, Flex, Image, Divider, Text, ChakraBaseProvider, Stack, SimpleGrid, Spacer, Center, VStack, HStack } from '@chakra-ui/react';
 import { Grid, GridItem, Heading, Box, Button, ButtonGroup, StackDivider } from '@chakra-ui/react'
 import { Card, Icon, IconButton, CardBody, CardFooter, CardHeader, CardBodyProps } from '@chakra-ui/react';
+import AnnouncementPostPage from './pages/annPostPage';
+import { BrowserRouter as Router, Route,Routes  } from 'react-router-dom';
 
 
 import {
@@ -22,7 +24,7 @@ import {
 
 import { db } from './firebase';
 import { uid } from 'uid';
-import { set, ref, onValue, update, get } from 'firebase/database';
+import { set, ref, remove, onValue, update, get } from 'firebase/database';
 import { getAuth, onAuthStateChanged, listUsers } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { useState, useEffect } from 'react';
@@ -38,6 +40,7 @@ import AnnounceSubmit from './announceSubmit';
 import AuthPost from './components/authPost';
 
 import { ViewIcon } from '@chakra-ui/icons';
+import AuthDelete from './components/authDelete';
 
 
 function App() {
@@ -67,33 +70,49 @@ function App() {
     });
   }, []);
 
-
-
-  // write
   const writeToDatabase = () => {
-    const uuid = uid();
-    set(ref(db, `/${uuid}`), {
-      todo,
-      uuid,
-    });
+    if (title && todo) { // Check if both title and todo are not empty
+      const uuid = uid();
+      const currentDate = new Date();
+      const timestamp = currentDate.toLocaleString();
+      set(ref(db, `/${uuid}`), {
+        title,
+        todo,
+        timestamp,
+        uuid,
+      });
 
-    setTodo("");
+      setTitle("");
+      setTodo("");
+    }
   }
 
+  const handleLike = async (todo, setTodos) => {
+    // Ensure likes is a number and increment it
+    const likes = typeof todo.likes === 'number' ? todo.likes + 1 : 1;
+
+    // Update the likes count locally
+    setTodos((prevTodos) => {
+      return prevTodos.map((t) => {
+        if (t.uuid === todo.uuid) {
+          return { ...t, likes };
+        }
+        return t;
+      });
+    });
+
+    // Update the likes count in the database
+    try {
+      await set(ref(db, `/${todo.uuid}/likes`), likes);
+    } catch (error) {
+      console.error('Failed to update likes in the database:', error);
+      // You can add error handling as needed
+    }
+  };
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-
-  // UI CONFIGURATION Responsive(to any screen)
-  const breakpoints = {
-    sm: '30em', // 480px
-    md: '48em', // 768px
-    lg: '62em', // 992px
-    xl: '80em', // 1280px
-    '2xl': '96em', // 1536px
-  }
-
 
   return (
     <ChakraBaseProvider>
@@ -122,33 +141,70 @@ function App() {
             </Text>
             <Spacer />
             <HStack
-              alignItems={['center', 'flex-start']} // Align items to center on small screens, to start on larger screens
-              marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
+              alignItems={['space-between', 'flex-start']} // Align items to center on small screens, to start on larger screens
+              marginTop={[1, 0]} // Add space on top on small screens, remove on larger screens
             >
+              <Popover placement='bottom' isLazy>
+                <Box>
+                  <PopoverTrigger >
+                    <Button >
+                      <Text paddingTop={[0, 10]} paddingLeft={[8, 12]} className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
+                        Post Form
+                      </Text>
+                    </Button>
+                  </PopoverTrigger>
+                </Box>
+                <PopoverContent paddingLeft={[5, 10]} paddingRight={[10, 0]}>
+                  <Box
+                    shadow={'dark-lg'}
+                    w={[300, 500]}
+                    maxH={400}
+                    borderStyle={'solid'}
+                    borderColor={'black'}
+                    borderWidth={3}
+                    bg={'white'}
+                  >
+                    <AuthPost />
+                  </Box>
+                </PopoverContent>
+              </Popover>
+
               {/* Login Button */}
-              <Popover offset={[-690, 100]} placement='bottom' isLazy>
-                <Box paddingRight={10} >
+              <Popover placement='bottom' isLazy>
+                <Box>
                   <PopoverTrigger>
                     <Button>
-                      <Text className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
+                      <Text
+                        className='imported'
+                        fontSize={['16', '20']}
+                        fontWeight={'bold'}
+                        paddingLeft={[5, 5]}
+                        paddingRight={5}
+                        paddingTop={[0, 10]}
+                      >
                         Login
                       </Text>
                     </Button>
                   </PopoverTrigger>
                 </Box>
-                <PopoverContent bg={'white'}>
+                <PopoverContent paddingLeft={[59, 0]} paddingRight={[8, 5]}>
                   <Box
                     shadow={'dark-lg'}
-                    w={500}
-                    h={400}
+                    w={[300, 500]}
+                    maxH={400}
                     borderStyle={'solid'}
                     borderColor={'black'}
                     borderWidth={3}
+                    bg={'white'}
                   >
                     <SignIn />
                   </Box>
                 </PopoverContent>
               </Popover>
+
+              <Box >
+                <AuthDetails />
+              </Box>
 
               {/* SignUp Button */}
               <Popover visibility={'hidden'} offset={[-790, 100]} placement='bottom' isLazy>
@@ -176,40 +232,7 @@ function App() {
               </Popover>
             </HStack>
           </HStack>
-          <HStack
-            justifyContent={['center', 'space-between']} // Center content on small screens, distribute space on larger screens
-            marginTop={[2, 0]} // Add space on top on small screens, remove on larger screens
-          >
-            <Popover offset={[500, 100]} placement='bottom' isLazy>
-              <Box>
-                <PopoverTrigger>
-                  <Button>
-                    <Text paddingLeft={12} className='imported' fontSize={['16', '20']} fontWeight={'bold'}>
-                      Post Form
-                    </Text>
-                  </Button>
-                </PopoverTrigger>
-              </Box>
-              <PopoverContent bg={'white'}>
-                <Box
-                  shadow={'dark-lg'}
-                  w={500}
-                  h={400}
-                  borderStyle={'solid'}
-                  borderColor={'black'}
-                  borderWidth={3}
-                  
-                >
-                  <AuthPost />
-                </Box>
-              </PopoverContent>
-            </Popover>
-            <Text
-              paddingRight={[0, 7]} // Remove right padding on small screens, add padding on larger screens
-            >
-              <AuthDetails />
-            </Text>
-          </HStack>
+
         </GridItem>
 
         {/* ANNOUNCEMENTS CONTENT */}
@@ -218,6 +241,7 @@ function App() {
             <HStack css={{ display: "flex", flexWrap: "nowrap", padding: "10px 0" }}>
               {todos.map((todo) => (
                 <Box
+                  key={todo.uuid}
                   borderWidth="1px"
                   borderColor="gray.300"
                   borderRadius="md"
@@ -226,12 +250,17 @@ function App() {
                   minWidth="350px" // Ensure each item has a fixed width
                   boxShadow="md"
                   backgroundColor={"white"}
-                  key={todo.uuid}
                   marginRight="20px" // Add some space between items
                 >
                   <VStack align="start" spacing="2">
                     <Box w="300px" h="200px">
-                      <Text paddingBottom={3} fontSize="lg" fontWeight="bold" >{todo.title}</Text>
+                      <HStack justify={'space-between'}>
+                        <Text paddingBottom={3} fontSize="lg" fontWeight="bold" >{todo.title}</Text>
+
+                        <Text>
+
+                        </Text>
+                      </HStack>
 
                       <Divider />
 
@@ -239,8 +268,14 @@ function App() {
 
                       <Text>{todo.timestamp}</Text>
                       <HStack>
-                        
-                        
+
+                        <Text>
+                          <button onClick={() => handleLike(todo, setTodos)}>
+                            Like ({todo.likes || 0})
+                          </button>
+                        </Text>
+
+
                       </HStack>
 
                     </Box>
@@ -258,6 +293,13 @@ function App() {
             <Text fontSize={20} paddingBottom={3} className='imported'>Contact Information</Text>
             <Text fontWeight={'medium'}>Feel free to message or email me at, ok@ok.com</Text>
           </Box>
+
+          <Router>
+            <Routes>
+              <Route exact path="/" component={AnnounceSubmit} />
+              <Route path="/announcement/:uuid" component={AnnouncementPostPage} />
+            </Routes>
+          </Router>
         </GridItem>
       </Grid>
 

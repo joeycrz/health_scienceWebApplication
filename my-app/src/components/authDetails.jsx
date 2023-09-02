@@ -37,21 +37,16 @@ const AuthDetails = () => {
                     {/* <Text className="imported">{`Signed In as ${authUser.email} `}</Text> */}
                     
                     <Button onClick={userSignOut}>
-                        <Box 
-                        backgroundColor={'gray.400'}
-                        borderStyle={'rounded'}
-                        >
-                            <Text p={'1'} className="imported" >Sign Out</Text>
+                        <Box paddingRight={[0,5]} paddingTop={[0,10]}>
+                            <Text className="imported" fontSize={['16', '20']} >Sign Out</Text>
                         </Box>
-
-                        
    
                     </Button>
                 </>
             ) : (
                 <>
               
-                <Text className="imported">You are currently signed out.</Text>
+                <Text className="imported"></Text>
                 </>
             )}
 
