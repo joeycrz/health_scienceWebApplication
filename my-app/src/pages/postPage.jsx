@@ -54,11 +54,7 @@ const PostPage = () => {
                         <Box>
                             {todo ? (
                                 <>
-                                    <Box alignSelf={'flex-end'}>
-                                        <Link to={'/'}>
-                                            <Text className='imported' fontSize={[15, 20]}>Home Page</Text>
-                                        </Link>
-                                    </Box>
+                        
                                     <Text className='imported' fontSize={50} >{todo.title}</Text>
 
 
