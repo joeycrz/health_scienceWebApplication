@@ -3,13 +3,8 @@ import './App.css';
 import './index.css';
 import { ChakraBaseProvider, Container, Button, Input, Textarea } from '@chakra-ui/react';
 import { Box, Text, } from '@chakra-ui/react';
-import {
-    FormControl,
-    FormLabel,
-
-} from '@chakra-ui/react'
-
-import { BrowserRouter as Router, Route, useNavigate } from 'react-router-dom';
+import {FormControl,FormLabel,} from '@chakra-ui/react'
+import { BrowserRouter as Router, Route, useNavigate, useParams } from 'react-router-dom';
 
 import { db } from './firebase';
 import { uid } from 'uid';
@@ -52,7 +47,7 @@ const AnnounceSubmit = () => {
     }, []);
 
     // write
-
+    
     
     const writeToDatabase = () => {
         if (title && todo) {
@@ -63,11 +58,13 @@ const AnnounceSubmit = () => {
                 title,
                 todo,
                 timestamp,
+                content,
                 uuid,
             });
 
             setTitle('');
             setTodo('');
+            setContent('');
 
             // Navigate to a new page (you can specify the route path)
              // Change '/new-page' to your desired route path
@@ -113,6 +110,23 @@ const AnnounceSubmit = () => {
                                         placeholder='Enter a description for the post.'
                                         value={todo}
                                         onChange={hanldeTodoChange}
+                                        width={[190, 300]}
+                                    />
+                                </Box>
+                            </FormControl>
+
+                            <FormControl mt={4}>
+                                <Box p={3} borderStyle={'ridge'} borderColor={'gray.700'} borderWidth={3}>
+                                    <FormLabel>
+                                        <Text paddingBottom={3} className='imported'>
+                                            Content
+                                        </Text>
+                                    </FormLabel>
+                                    <Input
+                                        type='text'
+                                        placeholder='Enter the content for the post.'
+                                        value={content}
+                                        onChange={handleContentChange}
                                         width={[190, 300]}
                                     />
                                 </Box>
