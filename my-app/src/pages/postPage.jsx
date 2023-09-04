@@ -11,7 +11,8 @@ import { initializeApp } from 'firebase/app';
 import { useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
+import HomePage from './homePage';
 
 const PostPage = () => {
     const { postId } = useParams();
@@ -48,12 +49,12 @@ const PostPage = () => {
                 p={1}
             >
 
-                <GridItem rowStart={1} rowEnd={2} colStart={1} colEnd={8} bg={'gray.200'}>
+                <GridItem rowStart={1} rowEnd={2} colStart={2} colEnd={6} bg={'gray.200'}>
                     <VStack>
                         <Box>
                             {todo ? (
                                 <>
-                                    <Text fontSize={40} >{todo.title}</Text>
+                                    <Text className='imported' fontSize={40} >{todo.title}</Text>
                                     <Text fontSize={20} fontStyle={'italic'} fontWeight={'semibold'}>{todo.todo}</Text>
                                 </>
                             ) : (
@@ -61,6 +62,11 @@ const PostPage = () => {
                             )}
                         </Box>
                     </VStack>
+                </GridItem>
+                <GridItem rowStart={1} rowEnd={2} colStart={6} colEnd={8} bg={'gray.200'}>
+                    <Link to={'/'} element={<HomePage />}>
+                        <Text className='imported' fontSize={[15,20]}>Home Page</Text>
+                    </Link>
                 </GridItem>
 
                 <GridItem rowStart={2} rowEnd={5} colStart={2} colEnd={6} bg={'gray.200'}>
@@ -82,7 +88,7 @@ const PostPage = () => {
                         <Box>
                             {todo ? (
                                 <>
-                                    <Text fontSize={[12,20]} >{todo.timestamp}</Text>
+                                    <Text fontSize={[12, 20]} >{todo.timestamp}</Text>
                                 </>
                             ) : (
                                 <Text>Loading...</Text>
