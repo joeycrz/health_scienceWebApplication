@@ -64,7 +64,7 @@ const PostPage = () => {
                     </VStack>
                 </GridItem>
                 <GridItem rowStart={1} rowEnd={2} colStart={6} colEnd={8} bg={'gray.200'}>
-                    <Link to={'/'} element={<HomePage />}>
+                    <Link to={'/'}>
                         <Text className='imported' fontSize={[15,20]}>Home Page</Text>
                     </Link>
                 </GridItem>
