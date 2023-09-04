@@ -49,13 +49,21 @@ const PostPage = () => {
                 p={1}
             >
 
-                <GridItem rowStart={1} rowEnd={2} colStart={2} colEnd={6} bg={'gray.200'}>
+                <GridItem rowStart={1} rowEnd={2} colStart={1} colEnd={8} bg={'gray.200'}>
                     <VStack>
                         <Box>
                             {todo ? (
                                 <>
-                                    <Text className='imported' fontSize={40} >{todo.title}</Text>
+                                    <Box alignSelf={'flex-end'}>
+                                        <Link to={'/'}>
+                                            <Text className='imported' fontSize={[15, 20]}>Home Page</Text>
+                                        </Link>
+                                    </Box>
+                                    <Text className='imported' fontSize={50} >{todo.title}</Text>
+
+
                                     <Text fontSize={20} fontStyle={'italic'} fontWeight={'semibold'}>{todo.todo}</Text>
+
                                 </>
                             ) : (
                                 <Text>Loading...</Text>
@@ -64,9 +72,7 @@ const PostPage = () => {
                     </VStack>
                 </GridItem>
                 <GridItem rowStart={1} rowEnd={2} colStart={6} colEnd={8} bg={'gray.200'}>
-                    <Link to={'/'}>
-                        <Text className='imported' fontSize={[15,20]}>Home Page</Text>
-                    </Link>
+
                 </GridItem>
 
                 <GridItem rowStart={2} rowEnd={5} colStart={2} colEnd={6} bg={'gray.200'}>
