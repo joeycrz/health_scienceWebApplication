@@ -216,7 +216,7 @@ const HomePage = () => {
                 <GridItem colStart={1} colEnd={8} rowStart={[2, null, 2]} rowEnd={5} bg="gray.200">
                     <Box padding={15} overflowX="auto">
                         <HStack css={{ display: "flex", flexWrap: "nowrap", padding: "10px 0" }}>
-                            {todos.map((todo) => (
+                            {todos.map((post) => (
                                 <Box
                                     borderWidth="1px"
                                     borderColor="gray.300"
@@ -231,8 +231,8 @@ const HomePage = () => {
                                     <VStack align="start" spacing="2">
                                         <Box w="300px" h="200px">
                                             <HStack justify={'space-between'}>
-                                                <Link to={`/post/${todo.uuid}`}>
-                                                    <Text paddingBottom={3} fontSize="lg" fontWeight="bold" >{todo.title}</Text>
+                                                <Link to={`/post/${post.uuid}`}>
+                                                    <Text paddingBottom={3} fontSize="lg" fontWeight="bold" >{post.title}</Text>
 
                                                 </Link>
 
@@ -244,9 +244,9 @@ const HomePage = () => {
 
                                             <Divider />
 
-                                            <Text>{todo.todo}</Text>
+                                            <Text>{post.todo}</Text>
 
-                                            <Text>{todo.timestamp}</Text>
+                                            <Text>{post.timestamp}</Text>
                                             <HStack>
 
                                                 <Text>

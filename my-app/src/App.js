@@ -7,7 +7,7 @@ import { useDisclosure, Card, Icon, IconButton, CardBody, CardFooter, CardHeader
 
 
 // Router
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom';
 
 // Database Libraries
 import { db } from './firebase';
@@ -41,10 +41,11 @@ function App() {
   return (
     <ChakraBaseProvider>
       <Routes>
-        <Route path ="/" element={<HomePage/>}/>
-        <Route path = "/post/:postId" element={<PostPage/>}/>
+        
+          <Route path="/" element={<HomePage />} />
+          <Route path="/post/:postId" element={<PostPage />} />
       </Routes>
-      
+
     </ChakraBaseProvider>
   );
 }
